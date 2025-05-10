@@ -1,0 +1,28 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the mushroom dataset
+url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data'
+columns = [
+    'class', 'cap-shape', 'cap-surface', 'cap-color', 'bruises', 'odor',
+    'gill-attachment', 'gill-spacing', 'gill-size', 'gill-color',
+    'stalk-shape', 'stalk-root', 'stalk-surface-above-ring',
+    'stalk-surface-below-ring', 'stalk-color-above-ring',
+    'stalk-color-below-ring', 'veil-type', 'veil-color', 'ring-number',
+    'ring-type', 'spore-print-color', 'population', 'habitat'
+]
+df = pd.read_csv(url, header=None, names=columns)
+
+# Select key columns
+df_subset = df[['class', 'odor', 'cap-color']].copy()
+df_subset.columns = ['Edibility', 'Odor', 'CapColor']
+
+# Encode categorical values
+df_subset['Edibility'] = df_subset['Edibility'].map({'e': 0, 'p': 1})
+df_subset['Odor'] = df_subset['Odor'].astype('category').cat.codes
+df_subset['CapColor'] = df_subset['CapColor'].astype('category').cat.codes
+
+# Summary stats
+print(df_subset.describe())
+
